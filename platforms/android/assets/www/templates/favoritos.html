@@ -1,0 +1,27 @@
+<ion-view title="Favoritos" id="page3">
+
+<ion-content padding="true" class="has-header">
+
+  <ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()" spinner="bubbles">
+  </ion-refresher>
+
+    <div class="card" ng-repeat="item in favoritos">
+      <div class="item item-icon-right item-text-wrap">
+      <i ng-class="!item.added ? 'icon ion-ios-star energized' : 'icon ion-ios-star-outline '" ng-click="GuardaFavorito(item)"></i>      
+       <span class="badge badge-balanced">{{item.codigo}}</span>
+       <h2 class="calm">{{item.designacao}}</h2>
+       <h3>{{item.grupo}}</h3>
+       <p>{{item.instrucaoColheita}}</p>
+       <p>{{item.instrucaoPreparacao}}</p>
+       <p>{{item.manualcolheitaDesignacao}}</p>
+       <p>{{item.produtoColher}}</p>
+       <p>{{item.tempoExecucao}}</p>
+       <p>{{item.qtColher}}</p>
+      </div>
+    </div>
+
+  <p class="calm" align="center">Puxe para atualizar</p>
+
+</ion-content>
+
+</ion-view>

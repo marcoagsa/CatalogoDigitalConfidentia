@@ -1,0 +1,30 @@
+<ion-view title="Login" hide-nav-bar="true" id="page11" class="side-menu-gradient">
+
+<ion-content padding="true" class="login-content" overflow-scroll="false">
+
+  <h2 id="login-heading3" style="color:#FFF;font-weight:600;text-align:center;">Catalogo Digital</h2>
+  <div>
+    <img ng-src="img/logo.png" width="70%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
+  </div>
+
+<form id="login-form5" class="list">
+  <ion-list id="login-list7">
+    <label class="item item-input item-floating-label login" id="login-input4" name="Utilizador">
+      <input type="text" placeholder="Utilizador">
+    </label>
+    <label class="item item-input item-floating-label login" id="login-input5" name="Palavra Passe">
+      <input type="password" placeholder="Palavra Passe">
+    </label>
+  </ion-list>
+
+  <div class="spacer" style="height: 20px;"></div>
+    <a ui-sref="page1.pesquisa" id="login-button10" class="button button-calm  button-block icon ion-log-in"> Iniciar Sessão</a>
+    <ion-toggle toggle-class="toggle-calm " id="login-toggle2" class="login">Manter sessão iniciada
+    </ion-toggle>
+    <a ng-click="Email()"  id="login-button11" style="font-weight:600;border-radius:0px 0px 0px 0px;"
+      class="button button-positive  button-block button-clear icon ion-ios-email-outline"> Peça o seu LogIn </a>
+</form>
+
+</ion-content>
+
+</ion-view>

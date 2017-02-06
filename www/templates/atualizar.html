@@ -1,0 +1,19 @@
+<ion-view title="Atualizar" id="page4" cache-view="false">
+
+<ion-content padding="true" class="has-header">
+
+  <ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()">
+  </ion-refresher>
+
+  <div class="teste" ng-hide="(progressval == 100)">
+    <progress id="progressbar" value="{{ progressval }}" max="100"></progress>
+  </div>
+
+  <div class="html5-progress-bar progress-value calm" align="center" id="prograssbarlabel" ng-hide="(progressval == 100)">{{ progressval }}%</div>
+  <div class="teste calm" align="center" ng-show="(progressval == 100)">
+    Donwload completou!!!
+  </div>
+
+</ion-content>
+  
+</ion-view>

@@ -1,0 +1,13 @@
+{
+  "name": "CD",
+  "app_id": "04a741d0",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "www/**/*",
+    "!www/lib/**/*",
+    "!www/**/*.map"
+  ]
+}

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width telephone=no">
+  <title></title>
+
+  <!-- compiled css output -->
+  <link href="css/ionic.app.css" rel="stylesheet">
+  <link href="css/animate.css" rel="stylesheet">
+
+  <script src="lib/ionic/js/ionic.bundle.js"></script>
+  <script src="lib/ionic-scroll-sista/dist/ionic.scroll.sista.js"></script>
+  <!-- cordova script (this will be a 404 during development) -->
+  <script src="cordova.js"></script>
+
+
+  <style type="text/css">
+    .platform-ios .manual-ios-statusbar-padding{
+      padding-top:20px;
+    }
+    .manual-remove-top-padding{
+      padding-top:0px;
+    }
+    .manual-remove-top-padding .scroll{
+      padding-top:0px !important;
+    }
+    ion-list.manual-list-fullwidth div.list, .list.card.manual-card-fullwidth {
+      margin-left:-10px;
+      margin-right:-10px;
+    }
+    ion-list.manual-list-fullwidth div.list > .item, .list.card.manual-card-fullwidth > .item {
+      border-radius:0px;
+      border-left:0px;
+      border-right: 0px;
+    }
+  </style>
+
+
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+  <script src="js/routes.js"></script>
+  <script src="js/directives.js"></script>
+  <script src="js/services.js"></script>
+
+
+</head>
+<body ng-app="app" class="platform-android4_4" animation="slide-left-right-ios7">
+<div>
+  <ion-side-menus enable-menu-with-back-views="false" data-componentid="side-menu21">
+    <ion-side-menu-content>
+      <ion-nav-bar class="bar-calm">
+        <ion-nav-back-button></ion-nav-back-button>
+        <ion-nav-buttons side="left">
+          <button class="button button-icon button-clear ion-grid energized" menu-toggle="left"></button>
+        </ion-nav-buttons>
+      </ion-nav-bar>
+      <ion-nav-view></ion-nav-view>
+    </ion-side-menu-content>
+    <ion-side-menu side="left" id="side-menu21" overflow-scroll="false">
+      <ion-content ng-controller="menuCtrl" padding="true" style="top:0px !important;" class="side-menu-left side-menu-gradient">
+        <div class="spacer" data-componentid="spacer5" style="width: 268px; height: 14px;"></div>
+        <h3 id="menu-heading2" style="color:#FFFFFF;font-weight:600;text-align:center;" data-componentid="heading2">Confidentia</h3>
+        <div data-componentid="image4">
+          <img ng-src="img/logo.png" width="80%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
+        </div>
+        <ion-list id="menu-list3" class="side-menu-item" data-componentid="list3">
+          <ion-item class="item-icon-left  side-menu-item" id="menu-list-item13" ui-sref="login" menu-close="" data-componentid="list-item13">
+            <i class="icon ion-log-out"></i>Log out</ion-item>
+          <ion-item class="item-icon-left  side-menu-item" id="menu-list-item12" ui-sref="centrosDeColheita" menu-close="" data-componentid="list-item12">
+            <i class="icon ion-ios-medical-outline"></i>Centro de Colheita</ion-item>
+          <ion-item class="item-icon-left  side-menu-item" id="menu-list-item21" ui-sref="laboratorio" menu-close="" data-componentid="list-item21">
+            <i class="icon ion-erlenmeyer-flask"></i>Laboratório</ion-item>
+          <ion-item class="item-icon-left  side-menu-item" id="menu-list-item14" ui-sref="sobre" menu-close="" data-componentid="list-item14">
+            <i class="icon ion-ios-information-outline"></i>Sobre</ion-item>
+        </ion-list>
+        <div class="spacer" data-componentid="spacer4" style="width: 268px; height: 60px;"></div>
+        <div id="menu-button-bar1" class="button-bar" data-componentid="button-bar1">
+          <a href="#" onclick="window.open('https://pt-pt.facebook.com/', '_system', 'location=yes'); return false;" id="menu-button4" style="border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-facebook-outline" data-componentid="button4"></a>
+          <a href="#" onclick="window.open('https://pt.linkedin.com/', '_system', 'location=yes'); return false;" id="menu-button5" style="font-weight:lighter;border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-linkedin-outline" data-componentid="button5"></a>
+          <a href="#" onclick="window.open('https://www.instagram.com/', '_system', 'location=yes'); return false;" id="menu-button7" style="font-weight:lighter;border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-instagram-outline" data-componentid="button7"></a>
+          <a href="#" onclick="window.open('https://twitter.com/?lang=pt_pt', '_system', 'location=yes'); return false;" id="menu-button6" style="font-weight:lighter;font-size:1px;border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-twitter-outline" data-componentid="button6"></a>
+        </div>
+      </ion-content>
+    </ion-side-menu>
+  </ion-side-menus>
+</div>
+</body>
+</html>
