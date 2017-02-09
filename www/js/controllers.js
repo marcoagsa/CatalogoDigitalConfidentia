@@ -193,11 +193,53 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams','$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams, $cordovaGeolocation) {
 
+ var options = {timeout: 10000, enableHighAccuracy: true};
+ 
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+ 
+    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+ 
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+ 
+  }, function(error){
+    console.log("Could not get location");
+  })
+
+
+$scope.$on("$ionicParentView.afterEnter", function(){
+
+    var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
+    //var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map = new google.maps.Map(document.getElementById("map"));
+
+    //Wait until the map is loaded
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+      var marker = new google.maps.Marker({
+      map: $scope.map,
+      animation: google.maps.Animation.DROP,
+      position: latLng
+    });
+    
+    var infoWindow = new google.maps.InfoWindow({
+      content: "Estou a Aqui!"
+    });
+    
+    google.maps.event.addListener(marker, 'click', function () {
+      infoWindow.open($scope.map, marker);
+    });
+  });
+});
 
 }])
 
@@ -205,8 +247,8 @@ function ($scope, $stateParams) {
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $rootScope, $state, $stateParams, $ionicPopup, Api) {
-
-// Limpa o imput da pagina 
+  
+  // Limpa o imput da pagina 
   $scope.apagar = function () {
     $scope.search = '';
   }
@@ -231,8 +273,19 @@ function ($scope, $rootScope, $state, $stateParams, $ionicPopup, Api) {
 $scope.GuardaFavorito = function(analises) {
   
   var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+
+  var found = false;
+    for(var i = 0; i < favoritos.length; i++) {
+      if (favoritos[i].codigo == analises.codigo) {
+          found = true; 
+          console.log('Found ' + found);
+          break;
+          }
+          console.log('Found ' + found);
+        }
+      
  
-  if (!analises.added) {
+  if (!analises.added && found == false) {
     favoritos.push(analises);
     window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
     console.log("Adicionei artigo", analises);
@@ -252,21 +305,23 @@ $scope.GuardaFavorito = function(analises) {
     $scope.show = false;
     Api.getAnalisesDet().then(function(data) {
       $scope.analises = data.analiseDet;
-    var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
-   var found = false;
-    for(var i = 0; i < favoritos.length; i++) {
-    if (favoritos[i].codigo == $scope.analises.codigo) {
-      found = true; 
-      console.log('teste ' + found);
-     angular.element(i).removeClass(calm);
-      
-     break;
-  }
-    } 
-    });
+      var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+      var found = false;
+        for(var i = 0; i < favoritos.length; i++) {
+        if (favoritos[i].codigo == $scope.analises.codigo) {
+            found = true; 
+            $scope.favicon = found;
+            console.log('Found ' + found);
+            break;
+          }
+          $scope.favicon = found;
+          console.log('Found ' + found);
+        }
+      });
       $scope.title ='Analise Clinica';
       $state.go('page1.detalhes');
     }
+
 
 }])
 

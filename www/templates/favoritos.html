@@ -19,10 +19,11 @@
    
    <ion-list show-delete="favoritos.showDelete" show-reorder="favoritos.showReorder">
       
-     <ion-item class ="card item-avatar " ng-repeat="item in favoritos" ng-click="show = !show" class="item-remove-animate">
-       <img src="img/logo.png">
-     <h2>{{item.designacao}}</h2>
-     <p>{{item.grupo}}</p>
+     <ion-item class ="card" ng-repeat="item in favoritos" ng-click="show = !show" class="item-remove-animate">
+       <!--img src="img/logo.png"-->
+       <span class="badge badge-balanced">{{item.codigo}}</span>
+     <h3>{{item.designacao}}</h3>
+     <h4 class="balanced">{{item.grupo}}</h4>
      <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)"></ion-delete-button>
         <ion-option-button class="button-assertive" ng-click="edit(item)">
           Edit
@@ -30,16 +31,14 @@
         <ion-option-button class="button-calm" ng-click="share(item)">
           Share
         </ion-option-button>    
-       <div class="item-body" align="left" ng-show="show">
+       <div class="item-body"ng-show="show">
         <p>{{item.instrucaoColheita}}</p>
         <p>{{item.instrucaoPreparacao}}</p>
         <h4>{{item.manualcolheitaDesignacao}}</h4>
-        <h4>{{item.produtoColher}}</h4>   
-      <h4>
-        <a href="#" class="subdued">{{item.tempoExecucao}}</a>
-        <a href="#" class="subdued">{{item.qtColher}}</a>
-      </h4>
-      </div>  
+        <h4>Produto: <span class="balanced">{{item.produtoColher}}</span></h4>   
+        <h4 class="subdued">Tempo: <span class="balanced">{{item.tempoExecucao}}</span></h4>
+        <h4 class="subdued">Colher: <span class="balanced">{{item.qtColher}}</span></h4>
+       </div>  
        </ion-item>
      </ion-list>
 

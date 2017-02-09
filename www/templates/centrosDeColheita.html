@@ -1,6 +1,31 @@
 <ion-view title="Centros de Colheita" id="page10">
 
-  <ion-content padding="true" class="has-header">
-
+  <ion-content padding="true">
+     <div id="map" data-tap-disabled="true"></div>
+     
+     <div class="card">
+       <div class="item item-divider">
+         <h2>Nome : </h2><span>{{nomeLab}} - {{nomeLab1}}</span>
+         </div>
+         <div class="item item-text-wrap">
+           <h3>Morada : </h3><span>{{moradaLab}}</span>
+           <h3>Localidade : </h3><span>{{localidadeLab}}</span>
+           <h3>Código Postal : </h3><span>{{codigoPostalLab}}</span>
+           <h3>Contato : </h3><span>{{contato}}</span>
+           <h3>Fax : </h3><span>{{fax}}</span>
+           <h3>Email : </h3><span>{{emailLab}}</span>
+         </div>
+         <div class="item item-divider">
+           <span>
+              <i class="icon ion-ios-world-outline balanced"><span> www.confidentia.pt</span></i>
+              
+           </span>
+            <i class="icon ion-social-facebook positive" align="right">acebook <a href="{{facebook}}">{{facebook}}</a></i>
+               
+           
+              
+             
+         </div>
+        </div>
   </ion-content>
 </ion-view>

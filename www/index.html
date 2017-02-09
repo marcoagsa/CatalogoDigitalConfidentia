@@ -11,7 +11,14 @@
 
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/ionic-scroll-sista/dist/ionic.scroll.sista.js"></script>
+
+  <!--Google Maps -->
+  <!--script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2EsY&sensor=false&language=ja&region=PT"></script-->
+  <script src="http://maps.google.com/maps/api/js?&sensor=false&language=pt&region=PT"></script>
+  
+
   <!-- cordova script (this will be a 404 during development) -->
+  <script src="lib/ngCordova/dist/ng-cordova.js"></script>
   <script src="cordova.js"></script>
 
 
@@ -59,22 +66,25 @@
     </ion-side-menu-content>
     <ion-side-menu side="left" id="side-menu21" overflow-scroll="false">
       <ion-content ng-controller="menuCtrl" padding="true" style="top:0px !important;" class="side-menu-left side-menu-gradient">
-        <div class="spacer" data-componentid="spacer5" style="width: 268px; height: 14px;"></div>
-        <h3 id="menu-heading2" style="color:#FFFFFF;font-weight:600;text-align:center;" data-componentid="heading2">Confidentia</h3>
+        <div class="spacer" data-componentid="spacer5" style="width: 268px; height: 10px;"></div>
+        <h3 id="menu-heading2" style="color:#FFFFFF;font-weight:800;text-align:center;" data-componentid="heading2">Confidentia</h3>
         <div data-componentid="image4">
           <img ng-src="img/logo.png" width="80%" height="auto" style="display: block; margin-left: auto; margin-right: auto;">
         </div>
+         <div class="spacer" data-componentid="spacer8" style="width: 268px; height: 14px;"></div>
         <ion-list id="menu-list3" class="side-menu-item" data-componentid="list3">
           <ion-item class="item-icon-left  side-menu-item" id="menu-list-item13" ui-sref="login" menu-close="" data-componentid="list-item13">
-            <i class="icon ion-log-out"></i>Log out</ion-item>
+            <i class="icon ion-log-out assertive"></i><h3>Sair</h3></ion-item>
+             <ion-item class="item-icon-left  side-menu-item" id="menu-list-item13" ui-sref="pesquisa" menu-close="" data-componentid="list-item22">
+            <i class="icon ion-ios-search-strong stabel"></i><h3>Analises</h3></ion-item>
           <ion-item class="item-icon-left  side-menu-item" id="menu-list-item12" ui-sref="centrosDeColheita" menu-close="" data-componentid="list-item12">
-            <i class="icon ion-ios-medical-outline"></i>Centro de Colheita</ion-item>
+            <i class="icon ion-ios-medkit"></i><h3>Centro de Colheita</h3></ion-item>
           <ion-item class="item-icon-left  side-menu-item" id="menu-list-item21" ui-sref="laboratorio" menu-close="" data-componentid="list-item21">
-            <i class="icon ion-erlenmeyer-flask"></i>Laboratório</ion-item>
+            <i class="icon ion-erlenmeyer-flask"></i><h3>Laboratório</h3></ion-item>
           <ion-item class="item-icon-left  side-menu-item" id="menu-list-item14" ui-sref="sobre" menu-close="" data-componentid="list-item14">
-            <i class="icon ion-ios-information-outline"></i>Sobre</ion-item>
+            <i class="icon ion-ios-information-outline royal"></i><h3>Sobre</h3></ion-item>
         </ion-list>
-        <div class="spacer" data-componentid="spacer4" style="width: 268px; height: 60px;"></div>
+        <div class="spacer" data-componentid="spacer4" style="width: 268px; height: 70px;"></div>
         <div id="menu-button-bar1" class="button-bar" data-componentid="button-bar1">
           <a href="#" onclick="window.open('https://pt-pt.facebook.com/', '_system', 'location=yes'); return false;" id="menu-button4" style="border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-facebook-outline" data-componentid="button4"></a>
           <a href="#" onclick="window.open('https://pt.linkedin.com/', '_system', 'location=yes'); return false;" id="menu-button5" style="font-weight:lighter;border-radius:100px 100px 100px 100px;" class="button button-stable  button-block button-icon icon ion-social-linkedin-outline" data-componentid="button5"></a>
