@@ -185,24 +185,17 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('laboratorioCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
-
-
-}])
-
-.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams','$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('laboratorioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $stateParams, $cordovaGeolocation) {
 
- var options = {timeout: 10000, enableHighAccuracy: true};
+var options = {timeout: 20000, enableHighAccuracy: true};
  
   $cordovaGeolocation.getCurrentPosition(options).then(function(position){
  
     var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    //var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
 
     var mapOptions = {
       center: latLng,
@@ -213,7 +206,7 @@ function ($scope, $stateParams, $cordovaGeolocation) {
     $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
  
   }, function(error){
-    console.log("Could not get location");
+    console.log("Could not get location", error);
   })
 
 
@@ -243,11 +236,70 @@ $scope.$on("$ionicParentView.afterEnter", function(){
 
 }])
 
-.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $rootScope, $state, $stateParams, $ionicPopup, Api) {
-  
+function ($scope, $stateParams, $cordovaGeolocation) {
+
+  var options = {timeout: 20000, enableHighAccuracy: true};
+ 
+ 
+  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+ 
+    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    //var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
+
+    var mapOptions = {
+      center: latLng,
+      zoom: 17,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+ 
+    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
+ 
+  }, function(error){
+    console.log("Could not get location", error);
+  })
+
+
+$scope.$on("$ionicParentView.afterEnter", function(){
+
+    var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
+    //var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    map = new google.maps.Map(document.getElementById("map"));
+
+    //Wait until the map is loaded
+    google.maps.event.addListenerOnce(map, 'idle', function(){
+      var marker = new google.maps.Marker({
+      map: $scope.map,
+      animation: google.maps.Animation.DROP,
+      position: latLng
+    });
+    
+    var infoWindow = new google.maps.InfoWindow({
+      content: "Estou a Aqui!"
+    });
+    
+    google.maps.event.addListener(marker, 'click', function () {
+      infoWindow.open($scope.map, marker);
+    });
+  });
+});
+ 
+
+}])
+
+.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','$ionicScrollDelegate','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
+
+
+  //verifica se ouve alterações no imput
+  $scope.onSearchChange = function () {
+    $scope.show = false;
+  }
+
   // Limpa o imput da pagina 
   $scope.apagar = function () {
     $scope.search = '';
@@ -274,7 +326,8 @@ $scope.GuardaFavorito = function(analises) {
   
   var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
 
-  var found = false;
+//verifica se existe favoritos
+    var found = false;
     for(var i = 0; i < favoritos.length; i++) {
       if (favoritos[i].codigo == analises.codigo) {
           found = true; 
@@ -284,7 +337,7 @@ $scope.GuardaFavorito = function(analises) {
           console.log('Found ' + found);
         }
       
- 
+//adiciona ou remove favorito  
   if (!analises.added && found == false) {
     favoritos.push(analises);
     window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
@@ -305,6 +358,8 @@ $scope.GuardaFavorito = function(analises) {
     $scope.show = false;
     Api.getAnalisesDet().then(function(data) {
       $scope.analises = data.analiseDet;
+
+//verifica se existes favoritos para alterar a o icon de cor!!
       var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
         for(var i = 0; i < favoritos.length; i++) {
@@ -317,7 +372,9 @@ $scope.GuardaFavorito = function(analises) {
           $scope.favicon = found;
           console.log('Found ' + found);
         }
-      });
+         });
+        // nos detalhes da analise contrala o scroll para inicio   
+      $ionicScrollDelegate.$getByHandle('detalhesScroll').scrollTop();  
       $scope.title ='Analise Clinica';
       $state.go('page1.detalhes');
     }
