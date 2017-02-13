@@ -223,7 +223,6 @@ function ($scope, $stateParams, $cordovaGeolocation) {
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
 function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
 
-
   //verifica se ouve alterações no imput
   $scope.onSearchChange = function () {
     $scope.show = false;
@@ -293,7 +292,7 @@ $scope.GuardaFavorito = function(analises) {
       var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
         for(var i = 0; i < favoritos.length; i++) {
-        if (favoritos[i].codigo == $scope.analises.codigo) {
+        if (favoritos[i].codigo == analises.codigo) {
             found = true; 
             $scope.favicon = found;
             console.log('Found ' + found);

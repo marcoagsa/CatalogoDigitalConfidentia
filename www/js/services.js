@@ -1,11 +1,14 @@
 angular.module('app.services', [])
 
-.factory('Api', ['$http','$q','$ionicLoading','$ionicPopup','$rootScope','$interval',function($http, $q, $ionicLoading, $ionicPopup, $rootScope, $interval){
+.factory('Api', ['$http','$q','$ionicLoading','$ionicPopup','$rootScope','$interval',
+
+  function($http, $q, $ionicLoading, $ionicPopup, $rootScope, $interval){
 
   var grupoId;
   var analiseId;
   var url ='http://rds.confidentia.pt:8585/CatalogoAPI/rest/v1/analises/';
   var url2 ='http://rds.confidentia.pt:8585/CatalogoAPI/rest/v1/grupos/';
+
 
   function getAnalises(){
     var deferred =$q.defer();
@@ -57,8 +60,14 @@ angular.module('app.services', [])
     $ionicLoading.show({ templateUrl: 'templates/loading.html'});
     var deferred =$q.defer();
     $http.get(url2 + grupoId + '/analises').success(function(data, status){
-      var gruposDet = {'gruposDet': data, 'dataAtual': new Date()};
+      var gruposDet = {'grupoId':grupoId, 'gruposDet': data, 'dataAtual': new Date()};
       window.localStorage.setItem("gruposDet", JSON.stringify(gruposDet, status));
+
+      var detalhesgrupos = JSON.parse(window.localStorage.getItem("detalhesgrupos")) || [];
+      detalhesgrupos.push(gruposDet);
+      window.localStorage.setItem("detalhesgrupos", JSON.stringify(detalhesgrupos));
+
+
       $ionicLoading.hide();
       deferred.resolve(gruposDet);
       console.log("Serviço Http detalhes Com Sucesso....");
@@ -67,11 +76,20 @@ angular.module('app.services', [])
       // An alert dialog
       $ionicPopup.alert({ title: 'Erro!!!', template: 'Verifique a ligação à Internet.'});
       if(window.localStorage.getItem("gruposDet") !== undefined) {
-        data = JSON.parse(window.localStorage.getItem("gruposDet"));
-      }
-      //deferred.reject(data); //para regeitar a data usar sem LocalStorage
-      deferred.resolve(data);
+
+        detalhesgrupos = JSON.parse(window.localStorage.getItem("detalhesgrupos"));
+
+        for (var i = 0; i < detalhesgrupos.length; i++) {
+          var element = detalhesgrupos[i];
+          if (element.gruposDet.codigo == grupoId){
+            data=element.grupoDet; 
+            break;
+          }
+        }
+         deferred.resolve(data);
+        }
       console.log("Serviço Http detalhes Com Erro....");
+     
     });
     return deferred.promise;
   };
@@ -79,21 +97,38 @@ angular.module('app.services', [])
   function getAnalisesDet() {
     $ionicLoading.show({ templateUrl: 'templates/loading.html'});
     var deferred =$q.defer();
+   
     $http.get(url + analiseId + '/info').success(function(data, status){
+
       var analiseDet = {'analiseDet': data, 'dataAtual': new Date()};
       window.localStorage.setItem("analiseDet", JSON.stringify(analiseDet, status));
+
+      var detalhesAnalises = JSON.parse(window.localStorage.getItem("detalhesAnalises")) || [];
+      detalhesAnalises.push(analiseDet);
+      window.localStorage.setItem("detalhesAnalises", JSON.stringify(detalhesAnalises));
+
+
+
       $ionicLoading.hide();
       deferred.resolve(analiseDet);
       console.log("Serviço Http detalhes Com Sucesso....");
+
     }).error(function(data){
+
       $ionicLoading.hide();
-      // An alert dialog
-      $ionicPopup.alert({ title: 'Erro!!!', template: 'Verifique a ligação à Internet.'});
-      if(window.localStorage.getItem("analiseDet") !== undefined) {
-        data = JSON.parse(window.localStorage.getItem("analiseDet"));
-      }
-      //deferred.reject(data); //para regeitar a data usar sem LocalStorage
-      deferred.resolve(data);
+      
+      if(window.localStorage.getItem("detalhesAnalises") !== undefined) {
+        detalhesAnalises = JSON.parse(window.localStorage.getItem("detalhesAnalises"));
+
+        for (var i = 0; i < detalhesAnalises.length; i++) {
+          var element = detalhesAnalises[i];
+          if (element.analiseDet.codigo == analiseId){
+            data=element.analiseDet; 
+            break;
+          }
+        }
+         deferred.resolve(data);
+        }
       console.log("Serviço Http detalhes Com Erro....");
     });
     return deferred.promise;
