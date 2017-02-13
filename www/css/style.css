@@ -1,14 +1,15 @@
-/*configurações do mapa*/
-.scroll {
-    height: 100%;
-}
- 
+
+/* Mapa do centro de colheita  */
 #map {
-    width: 100%;
-    height: 50%;
+  width: 100%;
+  height: 100%;
 }
 
-/*Alteração das regras do paragrafo*/
+.scroll {
+  height: 100%;
+}
+
+/* alteraçoes do paragrafo  */
 p {
     display: block;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -55,11 +56,7 @@ p {
   .dashboard-main-container .box {
     padding-top: 20px;
     padding-bottom: 20px; }
-		
-/*loading configuração */
- .loading-container .loading {
-    background-color: rgba(0, 0, 0, 0);
- }
+
 
 
 /*Loading 2 progress bar*/
@@ -76,13 +73,13 @@ progress::-webkit-progress-bar {
   height: 8px;
 }
 progress::-webkit-progress-value {
-  background: #1EA9A7;
+  background: #367aa5;
   border-radius: 4px;
   border: 0;
   height: 8px;
 }
 progress::-moz-progress-bar {
-  background-color: #1EA9A7;
+  background-color:#367aa5;
   border-radius: 4px;
   border: 0;
   height: 8px;
@@ -95,27 +92,56 @@ progress::-moz-progress-bar {
   font-size: .8em;
   font-weight: 600;
   font-family: "Open Sans";
-  color: #1EA9A7;
+  color: #367aa5;
   height: 18px;
   float: right;
 }
 
 /*Barra de Pesquisa*/
 .bar.bar-subheader{
-  background-color: #1EA9A7;
+  background-color: #367aa5;
 }
 
+/* CSS Animação detalhes*/
+/*.card.ng-enter {
+    -webkit-animation: fadeInUpBig 1s;
+    animation: fadeInUpBig 1s;
+}
+
+.card.ng-enter-stagger {
+  -webkit-animation-delay:200ms;
+  animation-delay:200ms;
+
+  /* override to make sure it's not inherited from other styles */
+/*  -webkit-animation-duration:0;
+  animation-duration:0;
+}*/
+
+
+/*.list.ng-enter {
+    -webkit-animation: zoomInDown 1s;
+    animation: zoomInDown 1s;
+}
+
+.list.ng-enter-stagger {
+  -webkit-animation-delay:200ms;
+  animation-delay:200ms;
+
+  /* override to make sure it's not inherited from other styles */
+/*  -webkit-animation-duration:0;
+  animation-duration:0;
+}*/
 
 /* CCS Butão do popup alert*/
 .popup-buttons .button:last-child{
-		background-color:  #1EA9A7;
+		background-color:  #367aa5;
 }
 /* CSS for spinner*/
 .spinner svg {
   width: 28px;
   height: 28px;
   stroke: #444;
-  fill: #1EA9A7;
+  fill: #367aa5;
 }
 
 /* CSS do Loading */

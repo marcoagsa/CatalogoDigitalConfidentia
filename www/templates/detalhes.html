@@ -11,33 +11,34 @@
     </button>
   </div>
 
-<ion-content  class="has-subheader" scroll-sista="header-tabs" overflow-scroll="false" delegate-handle="detalhesScroll">
+<ion-content  class="has-subheader" scroll-sista="header-tabs" overflow-scroll="false">
 
   <div class="list" ng-hide="!show">
      <ion-item class="item item-divider" align="center">
-        <h3 class="balanced">{{grupo}}</h3>  
+        <h3 class="positive">{{grupo}}</h3>  
     </ion-item>
       <div class="item item-icon-right item-text-wrap" ng-repeat="item in grupos | orderBy:'designacao' | filter: {$:search} " ng-click="PassaId2(item.numanalise)">
-        <h3>{{item.designacao}}</h3><span class="balanced">Código Analise : </span>{{item.codigo}}
+        <h3>{{item.designacao}}</h3><span class="positive">Código Analise : </span>{{item.codigo}}
         <i class="icon ion-android-arrow-dropright energized"></i> 
       </div>
   </div>
 
-    <div class="card" padding="true"  ng-hide="show" aling="center">
+    <div class="card" padding="true" ng-hide="show">
       <div class="item item-icon-right item-text-wrap">
         <!--i class="calm" id="icon" ng-class="!analises.added ? 'icon ion-ios-star-outline' : 'icon ion-ios-star energized'" ng-click="GuardaFavorito(analises)" icon-switcher></i-->
         <i class="calm" ng-if="favicon != true" ng-class="!analises.added ? 'icon ion-ios-star-outline' : 'icon ion-ios-star energized'" ng-click="GuardaFavorito(analises)"></i>
-        <i class="calm" ng-if="favicon == true" ng-class="analises.added ? 'icon ion-ios-star-outline' : 'icon ion-ios-star  energized'" ng-click="GuardaFavorito(analises)"></i> 
-          <span class="badge badge-balanced">{{analises.codigo}}</span>
+        <i class="calm" ng-if="favicon == true" ng-class="analises.added ? 'icon ion-ios-star-outline' : 'icon ion-ios-star  energized'" ng-click="GuardaFavorito(analises)"></i>
+          <span class="badge badge-positive">{{analises.codigo}}</span>
            <h2 class="calm">{{analises.designacao}}</h2>
             <h3>{{analises.grupo}}</h3>
-            <p>{{analises.instrucaoColheita}}</p>
-            <p>{{analises.instrucaoPreparacao}}</p>
-            <p>{{analises.manualcolheitaDesignacao}}</p>
+            <p>{{analises.instrucaoColheita | limitTo: 100}}</p>
+            <p>{{analises.instrucaoPreparacao | limitTo: 100}}</p>
+            <p>{{analises.manualcolheitaDesignacao | limitTo: 100}}</p>
             <p>{{analises.produtoColher}}</p>
             <p>{{analises.tempoExecucao}}</p>
             <p>{{analises.qtColher}}</p>
       </div>
     </div>
+
   </ion-content>
 </ion-view>

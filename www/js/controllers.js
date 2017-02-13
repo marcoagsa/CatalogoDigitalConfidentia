@@ -185,122 +185,167 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('laboratorioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('laboratorioCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $cordovaGeolocation) {
+function ($scope, $stateParams) {
 
-var options = {timeout: 20000, enableHighAccuracy: true};
- 
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
- 
-    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    //var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
-
-    var mapOptions = {
-      center: latLng,
-      zoom: 17,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
- 
-    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
- 
-  }, function(error){
-    console.log("Could not get location", error);
-  })
-
-
-$scope.$on("$ionicParentView.afterEnter", function(){
-
-    var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
-    //var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    map = new google.maps.Map(document.getElementById("map"));
-
-    //Wait until the map is loaded
-    google.maps.event.addListenerOnce(map, 'idle', function(){
-      var marker = new google.maps.Marker({
-      map: $scope.map,
-      animation: google.maps.Animation.DROP,
-      position: latLng
-    });
-    
-    var infoWindow = new google.maps.InfoWindow({
-      content: "Estou a Aqui!"
-    });
-    
-    google.maps.event.addListener(marker, 'click', function () {
-      infoWindow.open($scope.map, marker);
-    });
-  });
-});
 
 }])
 
-.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$ionicModal', '$ionicActionSheet', '$timeout', '$http', '$log', '$state', '$location', '$ionicPopup', '$compile', '$ionicLoading', 'geolocationService', 'geofenceService',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $cordovaGeolocation) {
+function ($scope, $stateParams, $ionicModal, $ionicActionSheet, $timeout, $http, $log, $state, $location, $ionicPopup, $compile, $ionicLoading, geolocationService, geofenceService ) {
 
-  var options = {timeout: 20000, enableHighAccuracy: true};
- 
- 
-  $cordovaGeolocation.getCurrentPosition(options).then(function(position){
- 
-    var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    //var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
+	$scope.latLang={
+		lat:'',
+		lang:'',
+		location:''
+	};
+	
+		 $ionicLoading.show({
+            template: 'Getting geofences from device...',
+            duration: 5000
+        });
 
-    var mapOptions = {
-      center: latLng,
-      zoom: 17,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
-    };
- 
-    $scope.map = new google.maps.Map(document.getElementById("map"), mapOptions);
- 
-  }, function(error){
-    console.log("Could not get location", error);
-  })
+        $scope.geofences = [];
 
+        geofenceService.getAll().then(function (geofences) {
+            $ionicLoading.hide();
+            $scope.geofences = geofences;
+        }, function (reason) {
+            $ionicLoading.hide();
+            $log.log('An Error has occured', reason);
+        });
+		
+		
+        $scope.GetGeoLocation = function () {
+			
+            $log.log('Tracing current location...');
+            $ionicLoading.show({
+                template: 'Tracing current location...'
+            });
+            geolocationService.getCurrentPosition()
+                .then(function (position) {
+                    $log.log('Current location found');
+                    $log.log('Current location Latitude'+position.coords.latitude);
+                    $log.log('Current location Longitude'+position.coords.longitude);
+					
+                    $ionicLoading.hide();
+					$scope.latLang.lat=parseFloat(position.coords.latitude);
+					$scope.latLang.lang=parseFloat(position.coords.longitude);
+					var lat =$scope.latLang.lat;
+					var lang =$scope.latLang.lang; 
+					//You can hit request upto 2500 per day on free of cost. 
+					var mrgdata='http://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lang+'&sensor=true'
+					$http.get(mrgdata)
+							.success(function (response) { 
+							/* console.log(response.results[0].formatted_address); */
+							$scope.latLang.location=response.results[0].formatted_address;
+							console.log("Your Current Location is : " +$scope.latLang.location)
+							
+							var myLatlng = new google.maps.LatLng(lat,lang);
+        
+						var mapOptions = {
+						  center: myLatlng,
+						  zoom: 16,
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+						};
+						var map = new google.maps.Map(document.getElementById("map"),
+							mapOptions);
+						
+					   
+						 var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+						var compiled = $compile(contentString)($scope);
 
-$scope.$on("$ionicParentView.afterEnter", function(){
+						var infowindow = new google.maps.InfoWindow({
+						 
+						});
+						infowindow.setContent($scope.latLang.location);
+						infowindow.open(map, marker);
 
-    var latLng = new google.maps.LatLng(39.22443051,-8.69356781);
-    //var latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    map = new google.maps.Map(document.getElementById("map"));
+						var marker = new google.maps.Marker({
+						  position: myLatlng,
+						  map: map,
+						  title: 'Current Location'
+						});
 
-    //Wait until the map is loaded
-    google.maps.event.addListenerOnce(map, 'idle', function(){
-      var marker = new google.maps.Marker({
-      map: $scope.map,
-      animation: google.maps.Animation.DROP,
-      position: latLng
-    });
-    
-    var infoWindow = new google.maps.InfoWindow({
-      content: "Estou a Aqui!"
-    });
-    
-    google.maps.event.addListener(marker, 'click', function () {
-      infoWindow.open($scope.map, marker);
-    });
-  });
-});
- 
+						google.maps.event.addListener(marker, 'click', function() {
+						  infowindow.open(map,marker);
+						 
+						});
+
+						$scope.map = map;
+									
+							   
+				}).error(function (data, status, headers, config) {
+					console.log("error");
+					
+					 if (status == 0)
+						showalert("Error", "Errro Occured from Server site!");
+					else
+						showalert("Error", data); 
+				  
+				});
+
+		}, function (reason) {
+			$log.log('Cannot obtain current location', reason);
+		   
+			$ionicLoading.show({
+				template: 'Cannot obtain current location',
+				duration: 1500
+			});
+		});
+     };
+	 
+	 //This is default set location before fetching current location///
+	 //***************Start********************************//
+	 if($scope.latLang.lat==''){
+			var myLatlng = new google.maps.LatLng(39.22443051,-8.69356781);
+        
+						var mapOptions = {
+						  center: myLatlng,
+						  zoom: 20,
+						  mapTypeId: google.maps.MapTypeId.ROADMAP
+						};
+						var map = new google.maps.Map(document.getElementById("map"),
+							mapOptions);
+						
+					   
+						var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
+						var compiled = $compile(contentString)($scope);
+
+						var infowindow = new google.maps.InfoWindow({
+						 
+						});
+						infowindow.setContent($scope.latLang.location);
+						infowindow.open(map, marker);
+
+						var marker = new google.maps.Marker({
+						  position: myLatlng,
+						  map: map,
+						  title: 'Current Location'
+						});
+
+						google.maps.event.addListener(marker, 'click', function() {
+						  infowindow.open(map,marker);
+						 
+						});
+
+						$scope.map = map;
+	 }
+	 //***********************End**********************************///
+
 
 }])
 
-.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','$ionicScrollDelegate','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
+function ($scope, $rootScope, $state, $stateParams, $ionicPopup, Api) {
 
-
-  //verifica se ouve alterações no imput
-  $scope.onSearchChange = function () {
-    $scope.show = false;
-  }
-
-  // Limpa o imput da pagina 
+// Limpa o imput da pagina 
   $scope.apagar = function () {
     $scope.search = '';
   }
@@ -326,8 +371,7 @@ $scope.GuardaFavorito = function(analises) {
   
   var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
 
-//verifica se existe favoritos
-    var found = false;
+  var found = false;
     for(var i = 0; i < favoritos.length; i++) {
       if (favoritos[i].codigo == analises.codigo) {
           found = true; 
@@ -337,7 +381,7 @@ $scope.GuardaFavorito = function(analises) {
           console.log('Found ' + found);
         }
       
-//adiciona ou remove favorito  
+ 
   if (!analises.added && found == false) {
     favoritos.push(analises);
     window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
@@ -358,8 +402,6 @@ $scope.GuardaFavorito = function(analises) {
     $scope.show = false;
     Api.getAnalisesDet().then(function(data) {
       $scope.analises = data.analiseDet;
-
-//verifica se existes favoritos para alterar a o icon de cor!!
       var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
         for(var i = 0; i < favoritos.length; i++) {
@@ -372,13 +414,10 @@ $scope.GuardaFavorito = function(analises) {
           $scope.favicon = found;
           console.log('Found ' + found);
         }
-         });
-        // nos detalhes da analise contrala o scroll para inicio   
-      $ionicScrollDelegate.$getByHandle('detalhesScroll').scrollTop();  
+      });
       $scope.title ='Analise Clinica';
       $state.go('page1.detalhes');
     }
-
 
 }])
 

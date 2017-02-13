@@ -5,14 +5,15 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic','jett.ionic.scroll.sista','ngCordova','app.controllers', 'app.routes', 'app.directives','app.services',])
+angular.module('app', ['ionic','jett.ionic.scroll.sista','leaflet-directive','ngCordova',
+'app.controllers','app.routes', 'app.directives','app.services','app.servicemapas'])
 
 .config(function($ionicConfigProvider){
 
 
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform,$window, $compile, $document, $ionicLoading, $state,$log, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -23,5 +24,16 @@ angular.module('app', ['ionic','jett.ionic.scroll.sista','ngCordova','app.contro
     if (window.StatusBar) {
       StatusBar.styleDefault();
     }
-  });
+  	 if ($window.geofence) {
+              
+
+                $window.geofence.initialize();
+            }
+			
+		
+    });
+   $rootScope.$on('$stateChangeError', function (event, toState, toParams, fromState, fromParams, error) {
+            $log.log('stateChangeError ', error, toState, toParams, fromState, fromParams);
+           
+        });
 })

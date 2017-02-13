@@ -5,12 +5,12 @@
   <ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()">
   </ion-refresher>
 
-  <div class="teste" ng-hide="(progressval == 100)">
+  <div class="calm" ng-hide="(progressval == 100)">
     <progress id="progressbar" value="{{ progressval }}" max="100"></progress>
   </div>
 
   <div class="html5-progress-bar progress-value calm" align="center" id="prograssbarlabel" ng-hide="(progressval == 100)">{{ progressval }}%</div>
-  <div class="teste calm" align="center" ng-show="(progressval == 100)">
+  <div class="calm" align="center" ng-show="(progressval == 100)">
     Donwload completou!!!
   </div>
 
