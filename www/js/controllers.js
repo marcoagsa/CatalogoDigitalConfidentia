@@ -18,6 +18,11 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
 //verifica se ouve alterações no imput
   $scope.onSearchChange = function () {
     $scope.show = false;
+  // passa informação das analises para o pagina 
+  Api.getAnalises().then(function(data){
+    $scope.analises = data.dataAnalises;
+  })
+
   }
 
 // passa informação dos grupos para o pagina 
@@ -27,10 +32,6 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
     console.log("Informação da Api...");
   })
 
-// passa informação das analises para o pagina 
-  Api.getAnalises().then(function(data){
-    $scope.analises = data.dataAnalises;
-  })
 
 // passa id para a Api e muda para pagina detalhes
   $scope.PassaId = function(id){
@@ -43,6 +44,19 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
 // passa id para a Api e muda para pagina detalhes
   $scope.PassaId2 = function(id){
     Api.analiseId(id);
+
+    var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+      var found = false;
+        for(var i = 0; i < favoritos.length; i++) {
+        if (favoritos[i].numanalise == id) {
+            found = true; 
+            $rootScope.favicon = found;
+            console.log('Found ' + found);
+            break;
+          }
+          $rootScope.favicon = found;
+          console.log('Found ' + found);
+        }
     $rootScope.show = false;
     $state.go('page1.detalhes');
   }
@@ -185,167 +199,37 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('laboratorioCtrl', ['$scope', '$stateParams', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('laboratorioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+function ($scope, $stateParams, $cordovaGeolocation) {
+
 
 
 }])
 
-.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$ionicModal', '$ionicActionSheet', '$timeout', '$http', '$log', '$state', '$location', '$ionicPopup', '$compile', '$ionicLoading', 'geolocationService', 'geofenceService',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $ionicModal, $ionicActionSheet, $timeout, $http, $log, $state, $location, $ionicPopup, $compile, $ionicLoading, geolocationService, geofenceService ) {
+function ($scope, $stateParams, $cordovaGeolocation) {
 
-	$scope.latLang={
-		lat:'',
-		lang:'',
-		location:''
-	};
-	
-		 $ionicLoading.show({
-            template: 'Getting geofences from device...',
-            duration: 5000
-        });
-
-        $scope.geofences = [];
-
-        geofenceService.getAll().then(function (geofences) {
-            $ionicLoading.hide();
-            $scope.geofences = geofences;
-        }, function (reason) {
-            $ionicLoading.hide();
-            $log.log('An Error has occured', reason);
-        });
-		
-		
-        $scope.GetGeoLocation = function () {
-			
-            $log.log('Tracing current location...');
-            $ionicLoading.show({
-                template: 'Tracing current location...'
-            });
-            geolocationService.getCurrentPosition()
-                .then(function (position) {
-                    $log.log('Current location found');
-                    $log.log('Current location Latitude'+position.coords.latitude);
-                    $log.log('Current location Longitude'+position.coords.longitude);
-					
-                    $ionicLoading.hide();
-					$scope.latLang.lat=parseFloat(position.coords.latitude);
-					$scope.latLang.lang=parseFloat(position.coords.longitude);
-					var lat =$scope.latLang.lat;
-					var lang =$scope.latLang.lang; 
-					//You can hit request upto 2500 per day on free of cost. 
-					var mrgdata='http://maps.googleapis.com/maps/api/geocode/json?latlng='+lat+','+lang+'&sensor=true'
-					$http.get(mrgdata)
-							.success(function (response) { 
-							/* console.log(response.results[0].formatted_address); */
-							$scope.latLang.location=response.results[0].formatted_address;
-							console.log("Your Current Location is : " +$scope.latLang.location)
-							
-							var myLatlng = new google.maps.LatLng(lat,lang);
-        
-						var mapOptions = {
-						  center: myLatlng,
-						  zoom: 16,
-						  mapTypeId: google.maps.MapTypeId.ROADMAP
-						};
-						var map = new google.maps.Map(document.getElementById("map"),
-							mapOptions);
-						
-					   
-						 var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
-						var compiled = $compile(contentString)($scope);
-
-						var infowindow = new google.maps.InfoWindow({
-						 
-						});
-						infowindow.setContent($scope.latLang.location);
-						infowindow.open(map, marker);
-
-						var marker = new google.maps.Marker({
-						  position: myLatlng,
-						  map: map,
-						  title: 'Current Location'
-						});
-
-						google.maps.event.addListener(marker, 'click', function() {
-						  infowindow.open(map,marker);
-						 
-						});
-
-						$scope.map = map;
-									
-							   
-				}).error(function (data, status, headers, config) {
-					console.log("error");
-					
-					 if (status == 0)
-						showalert("Error", "Errro Occured from Server site!");
-					else
-						showalert("Error", data); 
-				  
-				});
-
-		}, function (reason) {
-			$log.log('Cannot obtain current location', reason);
-		   
-			$ionicLoading.show({
-				template: 'Cannot obtain current location',
-				duration: 1500
-			});
-		});
-     };
-	 
-	 //This is default set location before fetching current location///
-	 //***************Start********************************//
-	 if($scope.latLang.lat==''){
-			var myLatlng = new google.maps.LatLng(39.22443051,-8.69356781);
-        
-						var mapOptions = {
-						  center: myLatlng,
-						  zoom: 20,
-						  mapTypeId: google.maps.MapTypeId.ROADMAP
-						};
-						var map = new google.maps.Map(document.getElementById("map"),
-							mapOptions);
-						
-					   
-						var contentString = "<div><a ng-click='clickTest()'>Click me!</a></div>";
-						var compiled = $compile(contentString)($scope);
-
-						var infowindow = new google.maps.InfoWindow({
-						 
-						});
-						infowindow.setContent($scope.latLang.location);
-						infowindow.open(map, marker);
-
-						var marker = new google.maps.Marker({
-						  position: myLatlng,
-						  map: map,
-						  title: 'Current Location'
-						});
-
-						google.maps.event.addListener(marker, 'click', function() {
-						  infowindow.open(map,marker);
-						 
-						});
-
-						$scope.map = map;
-	 }
-	 //***********************End**********************************///
-
+  
+ 
 
 }])
 
-.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','$ionicScrollDelegate','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $rootScope, $state, $stateParams, $ionicPopup, Api) {
+function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
 
-// Limpa o imput da pagina 
+
+  //verifica se ouve alterações no imput
+  $scope.onSearchChange = function () {
+    $scope.show = false;
+  }
+
+  // Limpa o imput da pagina 
   $scope.apagar = function () {
     $scope.search = '';
   }
@@ -371,7 +255,8 @@ $scope.GuardaFavorito = function(analises) {
   
   var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
 
-  var found = false;
+//verifica se existe favoritos
+    var found = false;
     for(var i = 0; i < favoritos.length; i++) {
       if (favoritos[i].codigo == analises.codigo) {
           found = true; 
@@ -381,7 +266,7 @@ $scope.GuardaFavorito = function(analises) {
           console.log('Found ' + found);
         }
       
- 
+//adiciona ou remove favorito  
   if (!analises.added && found == false) {
     favoritos.push(analises);
     window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
@@ -401,7 +286,10 @@ $scope.GuardaFavorito = function(analises) {
     Api.analiseId(id);
     $scope.show = false;
     Api.getAnalisesDet().then(function(data) {
-      $scope.analises = data.analiseDet;
+    $scope.analises = data.analiseDet;
+
+
+//verifica se existes favoritos para alterar a o icon de cor!!
       var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
         for(var i = 0; i < favoritos.length; i++) {
@@ -414,10 +302,13 @@ $scope.GuardaFavorito = function(analises) {
           $scope.favicon = found;
           console.log('Found ' + found);
         }
-      });
+         });
+        // nos detalhes da analise contrala o scroll para inicio   
+      $ionicScrollDelegate.$getByHandle('detalhesScroll').scrollTop();  
       $scope.title ='Analise Clinica';
       $state.go('page1.detalhes');
     }
+
 
 }])
 

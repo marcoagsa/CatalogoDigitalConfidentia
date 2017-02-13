@@ -1,13 +1,28 @@
 <ion-view title="Centros de Colheita" id="page10">
 
+  <ion-content padding="true">
 
-  	<ion-content class="has-header list-padding" has-bouncing="true" >
-	
-	
- <div id="map" data-tap-disabled="true"></div>
-		
-	</ion-content>
-	<ion-footer-bar class="bar-energized">
-      <a ng-click="GetGeoLocation()" class="button button-icon icon ion-navigate">Find Me</a>
-    </ion-footer-bar>
+    
+
+  <div class="list card">
+    
+    <div class="item  item-icon-right" ng-click="show = !show">
+      <h2 class="">Nome Centro de Colheita</h2>
+      <h4>Horario de Funcionamento</h4>
+      <i class="icon ion-location energized" ></i> 
+  </div>
+
+    <div class="item item-image " ng-show="show">
+    
+    <div id="map" data-tap-disabled="true"></div>
+  </div>
+
+
+  <div ng-show="show">
+    <a class="item item-icon-left" href="#">
+    Teste Confidentia
+    </a>
+  </div>
+  
+  </ion-content>
 </ion-view>

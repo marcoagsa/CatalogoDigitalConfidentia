@@ -1,8 +1,6 @@
 angular.module('app.services', [])
 
-.factory('Api', ['$http','$q','$ionicLoading','$ionicPopup','$rootScope','$interval',
-
-function($http, $q, $ionicLoading, $ionicPopup, $rootScope, $interval){
+.factory('Api', ['$http','$q','$ionicLoading','$ionicPopup','$rootScope','$interval',function($http, $q, $ionicLoading, $ionicPopup, $rootScope, $interval){
 
   var grupoId;
   var analiseId;
@@ -118,4 +116,3 @@ return{
       analiseId: analiseId
     };
 }])
-

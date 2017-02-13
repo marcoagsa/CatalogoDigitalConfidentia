@@ -1,11 +1,32 @@
 <ion-view title="Sobre" id="page7">
   
-  <ion-content padding="true" class="has-header">
-    <div class="dashboard-main-container animated bounceInDown">
-      <h3>C<span class="thin">onfidentia</span> <b>T</b>M</h3>
-        <div class="avatar-conatainer">
-          <img ng-src="img/logo.png">
-          </div>
+  <ion-content padding="true">
 
+  <div class="dashboard-main-container animated bounceInDown">
+    <h3>C<span class="thin">onfidentia</span> <b>T</b>M</h3>
+    <div class="avatar-conatainer">
+    <img ng-src="img/logo.png">
+  </div>
+  <div class="conteudo">
+      <div class="laboratorio-picture"></div>
+      <div class="label">Nome</div>
+      <div class="dados">{{nomeLab}} - {{nomeLab1}}</div>
+      <div class="label">Morada</div>
+      <div class="dados">{{moradaLab}}</div>
+      <div class="label">Localidade</div>
+      <div class="dados">{{localidadeLab}}</div>
+      <div class="label">Código Postal</div>
+      <div class="dados">{{codigoPostalLab}}</div>
+      <div class="label">Contato</div>
+      <div class="dados">{{contato}}</div>
+      <div class="label">Fax</div>
+      <div class="dados">{{fax}}</div>
+      <div class="label">Email</div>
+      <div class="dados">{{emailLab}}</div>
+      <div class="label">WebPage</div>
+      <div class="dados"><a href="{{page}}">{{page}}</a></div>
+      <div class="label">Facebook</div>
+      <div class="dados"><a href="{{facebook}}">{{facebook}}</a></div>
+    </div>
   </ion-content>
 </ion-view>
