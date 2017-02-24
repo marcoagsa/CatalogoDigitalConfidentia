@@ -4,25 +4,33 @@
 
     
 
-  <div class="list card">
+  <ion-item class="card" ng-repeat="item in cc">
     
-    <div class="item  item-icon-right" ng-click="show = !show">
-      <h2 class="">Nome Centro de Colheita</h2>
-      <h4>Horario de Funcionamento</h4>
-      <i class="icon ion-location energized" ></i> 
+    <div class="item  item-icon-right"   ng-click="show = !show" >
+      <h4 class="calm">{{item.designacao}}</h4>   
+      <i class="icon ion-location energized" ng-click="mostramapa(item.latitude,item.longitude)" ></i> 
   </div>
 
-    <div class="item item-image " ng-show="show">
-    
-    <div id="map" data-tap-disabled="true"></div>
+  <div class="item" ng-show="show" >
+    <h4 class="calm">Localidade</h4>
+    <h5>{{item.localidade}}</h5>
+    <h4 class="calm">Morada</h4>
+    <h5>{{item.morada}}</h5>
+    <h4 class="calm">Cod. Postal</h4>
+    <h5>{{item.codpostal}}</h5>
+    <h4 class="calm">Tel.:</h4>
+    <h5>{{item.telefone}}</h5>
+    <h4 class="calm">Fax.:</h4>
+    <h5>{{item.fax}}</h5>
+    <h4 class="calm">Horário Funcionamento</h4>
+    <h5>{{item.horarioFuncionamento}}</h5>
+    <h4 class="calm">Horário de Colheitas</h4>
+    <h5>{{item.horarioColheitas}}</h5>
+    <h4 class="calm">Latitude</h4>
+    <h5>{{item.latitude}}</h5>
+    <h4 class="calm">Longitude</h4>
+    <h5>{{item.longitude}}</h5>
   </div>
-
-
-  <div ng-show="show">
-    <a class="item item-icon-left" href="#">
-    Teste Confidentia
-    </a>
-  </div>
-  
+</ion-item>
   </ion-content>
 </ion-view>

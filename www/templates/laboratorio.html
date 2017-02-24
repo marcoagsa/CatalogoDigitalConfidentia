@@ -1,27 +1,23 @@
 <ion-view title="Laboratorio" id="page8">
 
 <ion-content padding="true" class="has-header">
-     <div id="map" data-tap-disabled="true"></div>
+     
+
+     <leaflet lf-center="mapLab" defaults="defaults" width="100%" height="50%" markers="markers"></leaflet>
      
      <div class="card">
        <div class="item item-divider">
-         <h2>Nome : </h2><span></span></h2>
+         <h2 class="calm">{{Lab.dsg1}}</h2>
+         <h5>{{Lab.dsg2}}</h5>
          </div>
          <div class="item item-text-wrap">
-           <h3>Morada : </h3><span>{{moradaLab}}</span>
-           <h3>Localidade : </h3><span>{{localidadeLab}}</span>
-           <h3>Código Postal : </h3><span>{{codigoPostalLab}}</span>
-           <h3>Contato : </h3><span>{{contato}}</span>
-           <h3>Fax : </h3><span>{{fax}}</span>
-           <h3>Email : </h3><span>{{emailLab}}</span>
-         </div>
-         <div class="item item-divider">
-           <h3>
-              <i class="icon ion-ios-world-outline"> www.confidentia.pt</i>   
-           </h3>
-           <h3>
-            <i class="icon ion-social-facebook positive" align="right"> acebook</i>
-           </h3>      
+          <H4>Localidade : <span class="calm">{{Lab.localidade}}</span></H4>
+          <H4>Morada : <span class="calm">{{Lab.morada}}</span></H4>
+          <H4>Cod.Postal :<span class="calm">{{Lab.codigopostal}}</span></H4>
+          <H4>Tel. : <span class="calm">{{Lab.telefone}}</span></H4>
+          <H4>Fax : <span class="calm">{{Lab.fax}}</span></H4>
+          <H4>Latitude : <span class="calm">{{Lab.latitude}}</span></H4>
+          <H4>Longitude : <span class="calm">{{Lab.longitude}}</span></H4>
          </div>
         </div>
 

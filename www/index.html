@@ -2,20 +2,24 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width telephone=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title></title>
 
   <!-- compiled css output -->
   <link href="css/ionic.app.css" rel="stylesheet">
   <link href="css/animate.css" rel="stylesheet">
+  <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
+  
 
   <script src="lib/ionic/js/ionic.bundle.js"></script>
   <script src="lib/ionic-scroll-sista/dist/ionic.scroll.sista.js"></script>
 
-  <!--Google Maps -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBW-TZwn4U6QzUEiYysGpegaNC2hLniU4I&language=pt&region=PT"></script>
-  
+  <!--Necessário para os Mapas  -->
+  <script src="lib/leaflet/dist/leaflet.js"></script>
+  <script src="lib/angular-simple-logger/dist/angular-simple-logger.js"></script>
+  <script src="lib/ui-leaflet/dist/ui-leaflet_dev_mapped.js"></script>
 
+  
   <!-- cordova script (this will be a 404 during development) -->
   <script src="lib/ngCordova/dist/ng-cordova.js"></script>
   <script src="cordova.js"></script>
@@ -51,7 +55,7 @@
 
 
 </head>
-<body ng-app="app" class="platform-android4_4" animation="slide-left-right-ios7">
+<body ng-app="CD" class="platform-android4_4" animation="slide-left-right-ios7">
 <div>
   <ion-side-menus enable-menu-with-back-views="false" data-componentid="side-menu21">
     <ion-side-menu-content>

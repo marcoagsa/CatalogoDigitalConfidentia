@@ -15,7 +15,7 @@
 
   <div class="list" ng-hide="!show">
      <ion-item class="item item-divider" align="center">
-        <h3 class="positive">{{grupo}}</h3>  
+        <h3 class="positive">{{nomeGrupo}}</h3>  
     </ion-item>
       <div class="item item-icon-right item-text-wrap" ng-repeat="item in grupos | orderBy:'designacao' | filter: {$:search} " ng-click="PassaId2(item.numanalise)">
         <i class="icon ion-android-arrow-dropright energized"></i>

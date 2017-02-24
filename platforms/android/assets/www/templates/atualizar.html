@@ -1,18 +1,35 @@
-<ion-view title="Atualizar" id="page4">
+<ion-view title="Atualizar" id="page4" cache-view="false">
 
-<ion-content padding="true" class="has-header">
+  <div class="bar bar-subheader">
+   
+      <h1 class="title"></h1>
+      <div class="buttons">
+        <h5 class="stable"> Atualizar</h5>
+        <button class="button button-icon icon ion-refresh energized" ng-click="doRefresh()"></button>
+      </div>
+    </div>
 
-  <ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()">
+<ion-content padding="true" class="has-subheader">
+
+  <!--ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()">
   </ion-refresher>
 
-  <div class="teste" ng-hide="(progressval == 100)">
+  <div ng-hide="(progressval == 100)">
     <progress id="progressbar" value="{{ progressval }}" max="100"></progress>
   </div>
 
   <div class="html5-progress-bar progress-value calm" align="center" id="prograssbarlabel" ng-hide="(progressval == 100)">{{ progressval }}%</div>
-  <div class="teste calm" align="center" ng-show="(progressval == 100)">
+  <div class="calm" align="center" ng-show="(progressval == 100)">
     Donwload completou!!!
+  </div-->
+  <div class="card">
+  <div class="item item-text-wrap">
+   <h3 class="calm">Designação : <span class="dark">{{catVersao.designacao}}</span></h3>
+   <h3 class="calm">Data : <span class="dark">{{catVersao.dataReferencia | date:'dd-M-yyyy H:mm'}}</span></h3>
+   <h3 class="calm">Revisão : <span class="dark">{{catVersao.revisao}}</span></h3>
   </div>
+</div>
+
 
 </ion-content>
   

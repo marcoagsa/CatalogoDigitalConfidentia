@@ -1,13 +1,13 @@
-angular.module('app.controllers', [])
+angular.module('CD.controllers', [])
 
-.controller('pesquisaCtrl', ['$scope','$ionicScrollDelegate','$rootScope','$stateParams', '$state', '$ionicPopup','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('pesquisaCtrl', ['$scope','$ionicScrollDelegate','$rootScope','$stateParams', '$state', '$ionicPopup', '$http','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionicPopup, Api) {
+function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionicPopup, $http, Api) {
 
+  
 // define que no inicio o vai mostrar o layout dos grupos
   $scope.show = true;
-
 
 //Limpa o imput
   $scope.apagar = function () {
@@ -18,37 +18,32 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
 //verifica se ouve alterações no imput
   $scope.onSearchChange = function () {
     $scope.show = false;
-  // passa informação das analises para o pagina 
-  Api.getAnalises().then(function(data){
-    $scope.analises = data.dataAnalises;
-  })
-
   }
 
-// passa informação dos grupos para o pagina 
-  Api.getGrupos().then(function(data) {
-    $scope.grupos = data.gruposData;
-    $scope.dataAtual = data.dataAtual;
-    console.log("Informação da Api...");
-  })
+
+//carrega Grupos e Analises 
+ var catalogoApi = JSON.parse (window.localStorage.getItem("catalogoAPI"));
+ 
+ $scope.analises =  catalogoApi.Analises;
+ $scope.grupos = catalogoApi.Grupos;
+ $scope.dataAtual = catalogoApi.dataReferencia;
 
 
-// passa id para a Api e muda para pagina detalhes
-  $scope.PassaId = function(id){
-    Api.grupoId(id);
+// Envia Id Grupos para pagina detalhes
+  $scope.PassaId = function(id, grupo){
     $rootScope.show = true;
-    $rootScope.grupo = id;
+    $rootScope.numgrupo = id;
+    $rootScope.nomeGrupo = grupo;
     $state.go('page1.detalhes');
   }
 
-// passa id para a Api e muda para pagina detalhes
-  $scope.PassaId2 = function(id){
-    Api.analiseId(id);
+// Envia Id analise para pagina Detalhes
+  $scope.PassaId2 = function(numanalise,codigo,designacao){
 
     var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
         for(var i = 0; i < favoritos.length; i++) {
-        if (favoritos[i].numanalise == id) {
+        if (favoritos[i].numanalise == numanalise) {
             found = true; 
             $rootScope.favicon = found;
             console.log('Found ' + found);
@@ -57,11 +52,130 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
           $rootScope.favicon = found;
           console.log('Found ' + found);
         }
-    $rootScope.show = false;
-    $state.go('page1.detalhes');
-  }
+        $rootScope.idAnalise = numanalise;
+        $rootScope.show = false;
+        $state.go('page1.detalhes');
+      }
   
 }])
+
+.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','$ionicScrollDelegate','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
+
+var catalogoApi = JSON.parse (window.localStorage.getItem("catalogoAPI"));
+
+  //verifica se ouve alterações no imput
+  $scope.onSearchChange = function () {
+    $scope.show = false;
+  }
+
+  // Limpa o imput da pagina 
+  $scope.apagar = function () {
+    $scope.search = '';
+  }
+  
+
+//Seleciona o layout a mostrar na pagina detalhes  
+if ($scope.show == true) {
+  
+  var todasAnalises = catalogoApi.Analises;
+  var analisesGrupo = [];
+  var found = false;
+  
+  for(var i = 0; i < todasAnalises.length; i++) {
+    if (todasAnalises[i].numgrupo == $rootScope.numgrupo) {
+      found = true;
+      analisesGrupo.push(todasAnalises[i]);
+      $scope.grupos = analisesGrupo;
+    }
+  }
+  $scope.title = 'Grupo Cientifíco';
+}else{
+  
+  var todasInfo = catalogoApi.Informacoes;
+  var found = false;
+    
+  for(var i = 0; i < todasInfo.length; i++) {
+    if (todasInfo[i].numanalise == $rootScope.idAnalise) {
+      found = true;
+      $scope.analises = todasInfo[i];
+      break;
+    }
+   
+  }
+  $scope.title ='Analise Clinica';
+}
+
+
+
+// adiciona e remove favoritos no ficheiro JSON-Favoritos
+$scope.GuardaFavorito = function(analises) {
+  
+  var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+
+//verifica se existe favoritos
+    var found = false;
+    for(var i = 0; i < favoritos.length; i++) {
+      if (favoritos[i].codigo == analises.codigo) {
+          found = true; 
+          console.log('Found ' + found);
+          break;
+          }
+          console.log('Found ' + found);
+        }
+      
+//adiciona ou remove favorito  
+  if (!analises.added && found == false) {
+    favoritos.push(analises);
+    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log("Adicionei artigo", analises);
+  } else {
+    var index = favoritos.indexOf(analises);
+    favoritos.splice(index, 1);
+    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log("Removi artigo", favoritos);
+  }
+  analises.added = !analises.added;
+}
+
+// Envia Id analise para pagina Detalhes
+  $scope.PassaId2 = function(numanalise, codigo, designacao){
+    
+    var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+    var found = false;
+    
+    for(var i = 0; i < favoritos.length; i++) {
+      if (favoritos[i].numanalise == numanalise) {
+        found = true; 
+        $scope.favicon = found;
+        console.log('Found ' + found);
+        break;
+      }
+      $rootScope.favicon = found;
+      console.log('Found ' + found);
+    }
+    var todasAnalises = catalogoApi.Informacoes;
+    var found = false;
+    
+    for(var i = 0; i < todasAnalises.length; i++) {
+      if (todasAnalises[i].numanalise == numanalise) {
+        found = true;
+        $scope.analises = todasAnalises[i];
+        break;
+      }
+    
+    }
+    $scope.idAnalise = numanalise;
+    $scope.show = false;
+    $ionicScrollDelegate.scrollTop();
+    $state.go('page1.detalhes');
+  }
+
+}])
+
+
 
 .controller('favoritosCtrl', ['$scope', '$stateParams','$ionicPopup', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
@@ -135,43 +249,22 @@ $scope.doRefresh = function() {
 
 }])
 
-.controller('atualizarCtrl', ['$scope', '$stateParams','$interval', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('atualizarCtrl', ['$scope', '$stateParams','$interval','Api', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $interval) {
+function ($scope, $stateParams, $interva, Api) {
 
-  $scope.progressval = 0;
-  $scope.stopinterval = null;
+    var catalogoApi = JSON.parse (window.localStorage.getItem("catalogoAPI"));
 
+    $scope.catVersao = catalogoApi;
 
-  function startprogress()
-  {
-    $scope.progressval = 0;
-
-    if ($scope.stopinterval)
-    {
-      $interval.cancel($scope.stopinterval);
-    }
-
-    $scope.stopinterval = $interval(function() {
-      $scope.progressval = $scope.progressval + 1;
-      if( $scope.progressval >= 100 ) {
-        $interval.cancel($scope.stopinterval);
-        //$state.go('second');
-        return;
-      }
-    }, 100);
-  }
-  startprogress();
-
-
-  $scope.doRefresh = function()
-  {
-    startprogress();
+    $scope.doRefresh = function() {
+       //carrega Grupos e Analises 
+    Api.getData().then(function(data) {
+      $scope.catVersao = data;
+    });
     $scope.$broadcast("scroll.refreshComplete");
-  }
-
-
+  };
 
 }])
 
@@ -199,122 +292,114 @@ function ($scope, $stateParams) {
 
 }])
 
-.controller('laboratorioCtrl', ['$scope', '$stateParams', '$cordovaGeolocation',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('laboratorioCtrl', ['$scope', '$stateParams','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $cordovaGeolocation) {
+function ($scope, $stateParams, Api) {
+
+  // carrega dados laboratório localStorage
+  var dadosLab = JSON.parse (window.localStorage.getItem("dadosLab"));
 
 
+  var lat = dadosLab.latitude;
+  var lng = dadosLab.longitude;
+  var zoom = 17;
+  var defaults = {
+        tileLayer: "http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+        tileLayerOptions: {
+        detectRetina: true,
+        reuseTiles: true
+        }};
+  var mapLab = {
+    lat:lat,
+    lng:lng,
+    zoom:zoom,
+  };
+  var mainMarker = {lat:lat,lng:lng};
+
+  $scope.Lab = dadosLab;
+
+  $scope.mapLab = mapLab;
+
+  $scope.markers = {mainMarker: mainMarker};
+  $scope.defaults = defaults;
+
+  console.log("lat e Lng", lat, lng, zoom); 
 
 }])
 
-.controller('centrosDeColheitaCtrl', ['$scope', '$stateParams', '$cordovaGeolocation', // The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('centrosDeColheitaCtrl', ['$scope', '$state','$stateParams','$rootScope', 'Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams, $cordovaGeolocation) {
+function ($scope, $state, $stateParams, $rootScope, Api) {
 
-  
+// carrega dados centro colheita localStorage
+  var dadosCc = JSON.parse (window.localStorage.getItem("dadosCc"));
+
+  $scope.cc = dadosCc;
+ 
+  $scope.mostramapa = function(latitude, longitude){
+    $rootScope.lat = latitude;
+    $rootScope.lng = longitude;
+    $state.go('detalhesmapa');
+  }
  
 
 }])
 
-.controller('detalhesCtrl', ['$scope','$rootScope','$state','$stateParams','$ionicPopup','$ionicScrollDelegate','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('detmapaCtrl', ['$scope', '$stateParams', '$rootScope',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $rootScope, $state, $stateParams, $ionicPopup, $ionicScrollDelegate, Api) {
+function ($scope, $stateParams, $rootScope) {
 
-  //verifica se ouve alterações no imput
-  $scope.onSearchChange = function () {
-    $scope.show = false;
-  }
-
-  // Limpa o imput da pagina 
-  $scope.apagar = function () {
-    $scope.search = '';
-  }
+  var lat = $rootScope.lat;
+  var lng = $rootScope.lng;
+  var zoom = 17;
+  var mainMarker = {lat:lat,lng:lng};
+  var defaults = {
+        tileLayer:"http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png",
+        maxZoom: 20,
+        scrollWheelZoom: false,
+        tileLayerOptions: {
+          detectRetina: true,
+          reuseTiles: true
+        }
+      };
   
-//Seleciona o layout a mostrar na pagina detalhes  
-  if ($scope.show == true) {
-  //passa informação para a pagina com id
-  Api.getGruposDet().then(function(data) {
-      $scope.grupos = data.gruposDet;   
+  var cc = {
+    lat:lat,
+    lng:lng,
+    zoom:zoom
+  };
+
+  $scope.cc = cc;
+  $scope.markers = {mainMarker: mainMarker};
+  $scope.defaults = defaults;
+
+  console.log("lat e Lng", lat, lng, zoom);      
+}])
+
+
+.controller('loginCtrl', ['$scope', '$rootScope', '$stateParams','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+// You can include any angular dependencies as parameters for this function
+// TIP: Access Route Parameters for your page via $stateParams.parameterName
+function ($scope, $stateParams, $rootScope, Api) {
+
+  //carrega Grupos e Analises 
+  Api.getData().then(function(data) {
   });
-   $scope.title = 'Grupo Cientifíco';
-  }else{
-  //passa informação para a pagina com id
-  Api.getAnalisesDet().then(function(data) {
-      $scope.analises = data.analiseDet; 
-    });
-    $scope.title ='Analise Clinica';
-  }
- 
 
-// adiciona e remove favoritos no ficheiro JSON-Favoritos
-$scope.GuardaFavorito = function(analises) {
-  
-  var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+  //carrega info do laboratório
+  Api.getLabInfo().then(function(data) {   
+  });
 
-//verifica se existe favoritos
-    var found = false;
-    for(var i = 0; i < favoritos.length; i++) {
-      if (favoritos[i].codigo == analises.codigo) {
-          found = true; 
-          console.log('Found ' + found);
-          break;
-          }
-          console.log('Found ' + found);
-        }
-      
-//adiciona ou remove favorito  
-  if (!analises.added && found == false) {
-    favoritos.push(analises);
-    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    console.log("Adicionei artigo", analises);
-  } else {
-    var index = favoritos.indexOf(analises);
-    favoritos.splice(index, 1);
-    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
-    console.log("Removi artigo", favoritos);
-  }
-  analises.added = !analises.added;
-
-}
-
-// passa id da analise para a Api e retorna pagina detalhes
-  $scope.PassaId2 = function(id){
-    Api.analiseId(id);
-    $scope.show = false;
-    Api.getAnalisesDet().then(function(data) {
-    $scope.analises = data.analiseDet;
+   //carrega info dos centro colheita
+  Api.getCcInfo().then(function(data) {
+  });
 
 
-//verifica se existes favoritos para alterar a o icon de cor!!
-      var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
-      var found = false;
-        for(var i = 0; i < favoritos.length; i++) {
-        if (favoritos[i].codigo == analises.codigo) {
-            found = true; 
-            $scope.favicon = found;
-            console.log('Found ' + found);
-            break;
-          }
-          $scope.favicon = found;
-          console.log('Found ' + found);
-        }
-         });
-        // nos detalhes da analise contrala o scroll para inicio   
-      $ionicScrollDelegate.$getByHandle('detalhesScroll').scrollTop();  
-      $scope.title ='Analise Clinica';
-      $state.go('page1.detalhes');
-    }
 
-
-}])
-
-.controller('loginCtrl', ['$scope', '$stateParams',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
-// You can include any angular dependencies as parameters for this function
-// TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $stateParams) {
+ $rootScope.slideSideMenu = false;
 
   $scope.Email = function() {
           if(window.plugins && window.plugins.emailComposer) {

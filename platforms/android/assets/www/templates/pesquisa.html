@@ -1,4 +1,4 @@
-<ion-view title="Pesquisa" id="page2">
+<ion-view title="Pesquisa" id="page2" cache-view="false">
 
   <div class="bar bar-subheader item-input-inset">
     <label class="item-input-wrapper">
@@ -10,23 +10,20 @@
     </button>
   </div>
 
-<ion-content  class="has-subheader" scroll-sista overflow-scroll="false">
-
-  <ion-refresher pulling-text="Puxe para atualizar..." on-refresh="doRefresh()" spinner="bubbles">
-  </ion-refresher>
+<ion-content  class="has-subheader" scroll-sista="header-tabs" overflow-scroll="false">
 
   <ion-item class="item item-divider" align="center">
-    <h3>Ultima atulização :  <span class="energized"> {{dataAtual | date:'dd-M-yyyy H:mm'}}</span></h3>
+    <h3>Ultima atulização :  <span class="positive"> {{dataAtual | date:'dd-M-yyyy H:mm'}}</span></h3>
   </ion-item>
   <ion-item class="item item-divider" align="center">
-    <h3 class="energized" >Grupos Cientifícos</h3>   
+    <h3 class="positive" >Grupos Cientifícos</h3>   
   </ion-item>
 
 
 <ion-list class="list">
-    <ion-item class="item item-icon-right item-text-wrap " ng-repeat="item in grupos | filter: {grupo:search}" type="item-text-wrap" ng-click="PassaId(item.grupo)">
+    <ion-item class="item item-icon-right item-text-wrap " ng-repeat="item in grupos | filter: {grupo:search}" type="item-text-wrap" ng-click="PassaId(item.numgrupo, item.grupo)">
       <div>
-       <span class="badge badge-balanced">{{item.qtAnalises}}</span>
+       <span class="badge badge-positive">{{item.qtAnalises}}</span>
       </div>
        <h2>{{item.grupo}}</h2>
         <i class="icon ion-android-arrow-dropright energized"></i> 
@@ -34,16 +31,15 @@
 </ion-list>
 
 <ion-item class="item item-divider" align="center" ng-show="!show">
-    <h3 class="energized">Analises Clínicas</h3>   
+    <h3 class="positive">Analises Clínicas</h3>   
   </ion-item>
   
 <div class="list" ng-show="!show">
-      <div class="item item-icon-right item-text-wrap" ng-repeat="item in analises | orderBy: '-designacao' | filter: {designacao:search}" ng-click="PassaId2(item.numanalise)">
-       <h3>{{item.designacao}}</h3><span class="balanced">{{item.codigo}}</span>
+      <div class="item item-icon-right item-text-wrap" ng-repeat="item in analises | orderBy: 'designacao' | filter: {designacao:search} | limitTo:30" ng-click="PassaId2(item.numanalise)">
+       <h3>{{item.designacao}}</h3><span class="positive">{{item.codigo}}</span>
        <i class="icon ion-android-arrow-dropright energized"></i> 
       </div>
     </div>
-
 
 </ion-content>
 </ion-view>

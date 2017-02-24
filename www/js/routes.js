@@ -1,4 +1,4 @@
-angular.module('app.routes', [])
+angular.module('CD.routes', [])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
@@ -32,6 +32,7 @@ angular.module('app.routes', [])
         controller: 'detalhesCtrl'
     }}
   })
+
 
 .state('page1.favoritos', {
     url: '/page3',
@@ -79,6 +80,13 @@ angular.module('app.routes', [])
     url: '/page10',
     templateUrl: 'templates/centrosDeColheita.html',
     controller: 'centrosDeColheitaCtrl'
+  })
+
+
+.state('detalhesmapa', {
+    url: '/page25',
+    templateUrl: 'templates/detalhesmapa.html',
+    controller: 'detmapaCtrl'
   })
    
 .state('login', {

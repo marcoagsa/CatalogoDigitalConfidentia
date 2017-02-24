@@ -22,15 +22,15 @@
      <ion-item class ="card" ng-repeat="item in favoritos" ng-click="show = !show" class="item-remove-animate">
        <!--img src="img/logo.png"-->
        <span class="badge badge-positive">{{item.codigo}}</span>
-     <h3>{{item.designacao}}</h3>
+     <h3 class="calm">{{item.designacao}}</h3>
      <h4 class="positive">{{item.grupo}}</h4>
      <ion-delete-button class="ion-minus-circled" ng-click="onItemDelete(item)"></ion-delete-button>
-        <ion-option-button class="button-assertive" ng-click="edit(item)">
+        <!--ion-option-button class="button-assertive" ng-click="edit(item)">
           Edit
         </ion-option-button>
         <ion-option-button class="button-calm" ng-click="share(item)">
           Share
-        </ion-option-button>    
+        </ion-option-button-->    
        <div class="item-body"ng-show="show">
         <p>{{item.instrucaoColheita}}</p>
         <p>{{item.instrucaoPreparacao}}</p>

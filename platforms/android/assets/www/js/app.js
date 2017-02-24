@@ -5,7 +5,11 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('app', ['ionic','jett.ionic.scroll.sista','app.controllers', 'app.routes', 'app.directives','app.services',])
+angular.module('CD', ['ionic','jett.ionic.scroll.sista','ngCordova', 'nemLogging', 'ui-leaflet',
+'CD.controllers', 
+'CD.routes', 
+'CD.directives',
+'CD.services',])
 
 .config(function($ionicConfigProvider){
 
