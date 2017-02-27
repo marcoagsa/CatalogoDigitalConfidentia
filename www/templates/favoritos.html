@@ -9,13 +9,13 @@
       <a ui-set="{'activeTab': 1}">Exame</a>
     </li>
     <li ui-class="{'active': activeTab == 2}">
-      <a ui-set="{'activeTab': 2}">Produtos</a>
+      <a ui-set="{'activeTab': 2}">Colheita</a>
     </li>
     <li ui-class="{'active': activeTab == 3}">
-      <a ui-set="{'activeTab': 3}">Instruções</a>
+      <a ui-set="{'activeTab': 3}">Preparação</a>
     </li>
     <li ui-class="{'active': activeTab == 4}">
-      <a ui-set="{'activeTab': 4}">Colheita</a>
+      <a ui-set="{'activeTab': 4}">Instrução</a>
     </li>
   </ul>
         
@@ -28,7 +28,10 @@
   </div>
 
   <div ui-if="activeTab == 2" class="item item-body item-divider">
-    <p class="text-justify">{{item.instrucaoColheita}}</p>
+     <h4>Produto : <span class="calm">{{item.produtoColher}}</span></h4>   
+    <h4>Tempo : <span class="calm">{{item.tempoExecucao}}</span></h4>
+    <h4>Colher : <span class="calm">{{item.qtColher}}</span></h4>
+    <h4>Revisão : <span class="calm">{{item.manualcolheitaDesignacao}}</span></h4>    
   </div>
 
   <div ui-if="activeTab == 3">
@@ -38,10 +41,7 @@
   </div>
 
   <div ui-if="activeTab == 4" class="item item-divider" >
-    <h4>Produto : <span class="calm">{{item.produtoColher}}</span></h4>   
-    <h4>Tempo : <span class="calm">{{item.tempoExecucao}}</span></h4>
-    <h4>Colher : <span class="calm">{{item.qtColher}}</span></h4>
-    <h4>Revisão : <span class="calm">{{item.manualcolheitaDesignacao}}</span></h4>
+   <p class="text-justify">{{item.instrucaoColheita}}</p>
   </div>
 </div>
 

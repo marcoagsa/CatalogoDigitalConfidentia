@@ -19,7 +19,14 @@
   background-size: cover;
 }
 
-
+/*Alterações nos tabs dos detalhes */
+.nav-tabs > li > a {
+  color: #367aa5;
+  margin-right: 2px;
+  line-height: 1.42857143;
+  border: 1px solid transparent;
+  border-radius: 4px 4px 0 0;
+}
 
 /*configurações do mapa*/
 body {
@@ -34,11 +41,8 @@ html, body, #map {
 
 /*Alteração das regras do paragrafo*/
 p {
-    display: block;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 		color: slategrey;
-    white-space: pre;
-    margin: 1em 0;
 }
 
 /*-===========================.Pagina Perfil =====================-*/
