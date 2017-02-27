@@ -5,7 +5,8 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('CD', ['ionic','jett.ionic.scroll.sista','ngCordova', 'nemLogging', 'ui-leaflet',
+angular.module('CD', ['ionic','jett.ionic.scroll.sista','ngCordova','nemLogging','ui-leaflet',
+'mobile-angular-ui',
 'CD.controllers', 
 'CD.routes', 
 'CD.directives',

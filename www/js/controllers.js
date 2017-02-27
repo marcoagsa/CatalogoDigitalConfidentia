@@ -1,9 +1,9 @@
 angular.module('CD.controllers', [])
 
-.controller('pesquisaCtrl', ['$scope','$ionicScrollDelegate','$rootScope','$stateParams', '$state', '$ionicPopup', '$http','Api',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
+.controller('pesquisaCtrl', ['$scope','$ionicScrollDelegate','$rootScope','$stateParams', '$state',// The following is the constructor function for this page's controller. See https://docs.angularjs.org/guide/controller
 // You can include any angular dependencies as parameters for this function
 // TIP: Access Route Parameters for your page via $stateParams.parameterName
-function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionicPopup, $http, Api) {
+function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state) {
 
   
 // define que no inicio o vai mostrar o layout dos grupos
@@ -17,6 +17,7 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
 
 //verifica se ouve alterações no imput
   $scope.onSearchChange = function () {
+    $ionicScrollDelegate.scrollTop();
     $scope.show = false;
   }
 
@@ -38,7 +39,7 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
   }
 
 // Envia Id analise para pagina Detalhes
-  $scope.PassaId2 = function(numanalise,codigo,designacao){
+  $scope.PassaId2 = function(numanalise,grupo){
 
     var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
       var found = false;
@@ -53,6 +54,7 @@ function ($scope, $ionicScrollDelegate, $rootScope, $stateParams, $state, $ionic
           console.log('Found ' + found);
         }
         $rootScope.idAnalise = numanalise;
+        $rootScope.grupo = grupo;
         $rootScope.show = false;
         $state.go('page1.detalhes');
       }
@@ -141,7 +143,7 @@ $scope.GuardaFavorito = function(analises) {
 }
 
 // Envia Id analise para pagina Detalhes
-  $scope.PassaId2 = function(numanalise, codigo, designacao){
+  $scope.PassaId2 = function(numanalise, grupo){
     
     var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
     var found = false;
@@ -168,6 +170,7 @@ $scope.GuardaFavorito = function(analises) {
     
     }
     $scope.idAnalise = numanalise;
+    $scope.grupo = $rootScope.grupo;
     $scope.show = false;
     $ionicScrollDelegate.scrollTop();
     $state.go('page1.detalhes');
@@ -187,7 +190,7 @@ function ($scope, $stateParams, $ionicPopup) {
 // variavel dos favoritos 
 var fav = JSON.parse(window.localStorage.getItem("favoritos"))||[];
 
-// verifica se exitem favores e mostra alerta se não houver favoritos 
+// verifica se exitem favoritos e mostra alerta se não houver favoritos 
 if (fav.length == 0) {
     $ionicPopup.alert({
       title: 'Informação...',
@@ -200,18 +203,7 @@ if (fav.length == 0) {
   }
 
 
-  $scope.edit = function(item) {
-    alert('Edit Item: ' + item.id);
-  };
-  $scope.share = function(item) {
-    alert('Share Item: ' + item.id);
-  };
-
-  // reordena as favoritos no scope
-  $scope.moveItem = function(item, fromIndex, toIndex) {
-    $scope.favoritos.splice(fromIndex, 1);
-    $scope.favoritos.splice(toIndex, 0, item);
-  };
+ 
   
   //remove os favoritos do scope e do localStorage
   $scope.onItemDelete = function(item) {
@@ -224,6 +216,28 @@ if (fav.length == 0) {
     console.log("Removi artigo", favoritos);
   };
 
+
+// adiciona e remove favoritos no ficheiro JSON-Favoritos
+$scope.GuardaFavorito = function(item) {
+  
+  var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+      
+//adiciona ou remove favorito  
+  if (!item.added) {
+   $scope.favoritos.splice($scope.favoritos.indexOf(item), 1);
+    var favoritos = JSON.parse(window.localStorage.getItem("favoritos")) || [];
+    var index = favoritos.indexOf(item);
+    favoritos.splice(index, 1);
+    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    $scope.show = false;
+    console.log("Removi artigo", favoritos);
+  } else {
+    favoritos.push(item);
+    window.localStorage.setItem("favoritos", JSON.stringify(favoritos));
+    console.log("Adicionei artigo", item);
+  }
+  item.added = !item.added;
+}
 
 
 // atualiza os dados no tab favoritos
